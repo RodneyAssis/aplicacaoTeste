@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public class LivrosDTO {
     @Max(1000)
     private double preco;
 
+//    private String file;
     @JsonFormat(pattern = "dd.MM.YYYY HH:mm")
     private Timestamp creatAt;
 
@@ -33,4 +35,8 @@ public class LivrosDTO {
     public Timestamp getCreatAt() {
         return creatAt;
     }
+
+//    public String getFile() {
+//        return file;
+//    }
 }

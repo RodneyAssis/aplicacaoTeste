@@ -105,12 +105,17 @@ public class LivrosController {
 
     }
 
+//    @PutMapping("/{id}")
+//    public ResponseEntity<Object> addFoto(@RequestBody LivrosDTO livrosDTO, @PathVariable(name = "id") UUID id){
+//
+//        return ResponseEntity.status(HttpStatus.OK).body("Imagens adicionadas com sucesso.");
+//    }
+
 
     @DeleteMapping("/byebye")
     public ResponseEntity<Object> DELETATUDOOO(){
         livrosServices.deletaAll();
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("ACEITO: Tudo deletado");
     }
-
 
 }
