@@ -11,7 +11,7 @@ COPY . .
 
 #Instalar o maven
 RUN apt-get install maven -y
-RUN mvn clean install
+RUN mvn clean install -e
 
 
 FROM openjdk:17-jdk-slim
