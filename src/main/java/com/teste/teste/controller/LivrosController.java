@@ -38,7 +38,7 @@ public class LivrosController {
         }
         var livrosEntity = new LivrosEntity();
         BeanUtils.copyProperties(livrosDTO, livrosEntity);
-        Timestamp teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-6")));
+        Timestamp teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3")));
         livrosEntity.setCreatAt(teste);
 //        var timeNow = LocalDateTime.now();
 //        var formated = DateTimeFormatter.ofPattern("dd-MM-yyyy");
