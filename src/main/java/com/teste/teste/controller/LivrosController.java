@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,11 +57,8 @@ public class LivrosController {
     public Optional<LivrosEntity> viewForID(@PathVariable(value = "id") UUID id){
         var result = livrosServices.findbyID(id);
         if (result.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID não encontrado ou produto não existe");
             return result;
         }
-
-
 //        return ResponseEntity.status(HttpStatus.OK).body(result.get());
         return result;
     }

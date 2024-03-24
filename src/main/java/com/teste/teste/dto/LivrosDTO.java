@@ -18,8 +18,7 @@ public class LivrosDTO {
     private double preco;
 
 //    private String file;
-    @JsonFormat(pattern = "dd.MM.YYYY HH:mm")
-    private Timestamp creatAt;
+
 
     public String getNome() {
         return nome;
@@ -29,9 +28,6 @@ public class LivrosDTO {
         return preco;
     }
 
-    public Timestamp getCreatAt() {
-        return creatAt;
-    }
 
 //    public String getFile() {
 //        return file;
