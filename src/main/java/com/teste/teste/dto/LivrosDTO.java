@@ -1,11 +1,9 @@
 package com.teste.teste.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
-import java.sql.Timestamp;
 
 
 public class LivrosDTO {
@@ -15,6 +13,7 @@ public class LivrosDTO {
     private String nome;
 
     @Max(1000)
+    @Min(0)
     private double preco;
 
 //    private String file;

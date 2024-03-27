@@ -39,12 +39,7 @@ public class LivrosController {
         BeanUtils.copyProperties(livrosDTO, livrosEntity);
         Timestamp teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3")));
         livrosEntity.setCreatAt(teste);
-//        var timeNow = LocalDateTime.now();
-//        var formated = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//        var timeFormat = timeNow.format(formated);
-//        Timestamp teste = Timestamp.valueOf(timeFormat);
-//        livrosEntity.setCreatAt(teste);
-//        System.out.println(livrosEntity.toString());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(livrosServices.save(livrosEntity));
     }
 
