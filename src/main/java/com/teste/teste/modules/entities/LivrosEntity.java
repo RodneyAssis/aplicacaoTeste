@@ -1,20 +1,20 @@
 package com.teste.teste.modules.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.UUID;
 
 
-@Entity(name = "livro")
+@Entity
+@Table(name = "LIVROS_CONSULT")
 public class LivrosEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
@@ -23,6 +23,8 @@ public class LivrosEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(updatable = false)
+    private int codigo;
 
     @Column(length = 30, nullable = false, unique = true)
     private String nome;
@@ -35,6 +37,12 @@ public class LivrosEntity implements Serializable {
     @JsonFormat(pattern = "dd.MM.YYYY HH:mm")
     private Timestamp creatAt;
 
+    @ManyToOne
+    @JoinColumn(name = "fk_categorias")
+    @JsonBackReference // ESTUDAR ISSO
+    private CategoriaEntity categoriaEntity;
+
+    private Boolean Status;
 
     public UUID getId() {
         return id;
@@ -42,6 +50,14 @@ public class LivrosEntity implements Serializable {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(int codigo) {
+        this.codigo = codigo;
     }
 
     public String getNome() {
@@ -66,5 +82,21 @@ public class LivrosEntity implements Serializable {
 
     public void setCreatAt(Timestamp creatAt) {
         this.creatAt = creatAt;
+    }
+
+    public CategoriaEntity getCategoriaEntity() {
+        return categoriaEntity;
+    }
+
+    public void setCategoriaEntity(CategoriaEntity categoriaEntity) {
+        this.categoriaEntity = categoriaEntity;
+    }
+
+    public Boolean getStatus() {
+        return Status;
+    }
+
+    public void setStatus(Boolean status) {
+        Status = status;
     }
 }

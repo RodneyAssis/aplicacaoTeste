@@ -1,7 +1,9 @@
 package com.teste.teste.controller;
 
 import com.teste.teste.dto.LivrosDTO;
+import com.teste.teste.modules.entities.CategoriaEntity;
 import com.teste.teste.modules.entities.LivrosEntity;
+import com.teste.teste.services.CategoriaServices;
 import com.teste.teste.services.LivrosServices;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -22,11 +24,12 @@ import java.util.UUID;
 @RequestMapping("/livros")
 public class LivrosController {
 
-    final
-    LivrosServices livrosServices;
+    final LivrosServices livrosServices;
+    final CategoriaServices categoriaServices;
 
-    public LivrosController(LivrosServices livrosServices) {
+    public LivrosController(LivrosServices livrosServices, CategoriaServices categoriaServices) {
         this.livrosServices = livrosServices;
+        this.categoriaServices = categoriaServices;
     }
 
 
@@ -37,8 +40,17 @@ public class LivrosController {
         }
         var livrosEntity = new LivrosEntity();
         BeanUtils.copyProperties(livrosDTO, livrosEntity);
-        Timestamp teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3")));
+        livrosEntity.setCodigo(livrosServices.cont());
+        var teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3")));
         livrosEntity.setCreatAt(teste);
+
+        String nomeCategoria = livrosDTO.getCategoria();
+
+        var categoriaEntity = categoriaServices.findByName(nomeCategoria);
+
+        livrosEntity.setCategoriaEntity(categoriaEntity.get());
+
+
 
         return ResponseEntity.status(HttpStatus.CREATED).body(livrosServices.save(livrosEntity));
     }

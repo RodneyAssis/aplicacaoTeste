@@ -37,6 +37,14 @@ public class LivrosServices {
         return iLivrosRepository.findById(id);
     }
 
+    public int cont(){
+        return iLivrosRepository.ContadorLivros()+1;
+    }
+
+    public Optional<LivrosEntity> findbyCode(int codigo){
+        return iLivrosRepository.findByCodigo(codigo);
+    }
+
     @Transactional
     public void deletedID(UUID id) {
         iLivrosRepository.deleteById(id);
