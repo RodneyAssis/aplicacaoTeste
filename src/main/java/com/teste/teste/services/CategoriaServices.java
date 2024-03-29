@@ -28,7 +28,7 @@ public class CategoriaServices {
     }
 
     public Optional<CategoriaEntity> findByName(String nome) {
-        return iCategoriaRepository.findByNomeCategoria(nome);
+        return iCategoriaRepository.findCategoriaByName(nome);
     }
 
     public List<CategoriaEntity> findAllCategorias() {

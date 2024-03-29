@@ -14,7 +14,9 @@ import java.util.UUID;
 @Repository
 public interface ICategoriaRepository extends JpaRepository<CategoriaEntity, UUID> {
     boolean existsByNomeCategoria(String string);
-    Optional<CategoriaEntity> findByNomeCategoria(@Param("nome") String nome);
+
+    @Query("select c from CategoriaEntity c where c.nomeCategoria = :nome")
+    Optional<CategoriaEntity> findCategoriaByName(@Param("nome") String nome);
 
     @Query("select count(*) from CategoriaEntity")
     int contadorCategoria();

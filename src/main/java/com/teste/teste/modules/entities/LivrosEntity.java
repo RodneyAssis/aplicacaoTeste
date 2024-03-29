@@ -39,7 +39,7 @@ public class LivrosEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "fk_categorias")
-    @JsonBackReference // ESTUDAR ISSO
+//    @JsonBackReference // ESTUDAR ISSO
     private CategoriaEntity categoriaEntity;
 
     private Boolean Status;

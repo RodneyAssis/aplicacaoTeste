@@ -1,6 +1,7 @@
 package com.teste.teste.modules.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -25,7 +26,7 @@ public class CategoriaEntity implements Serializable {
     @Column(unique = true)
     private String nomeCategoria;
 
-    @JsonManagedReference
+//    @JsonManagedReference ESTUDAR ISSO
     @OneToMany(mappedBy = "categoriaEntity")
     List<LivrosEntity> livrosEntities;
 
@@ -53,6 +54,7 @@ public class CategoriaEntity implements Serializable {
         this.nomeCategoria = nomeCategoria;
     }
 
+    @JsonIgnore
     public List<LivrosEntity> getLivrosEntities() {
         return livrosEntities;
     }
