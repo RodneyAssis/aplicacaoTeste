@@ -3,9 +3,7 @@ package com.teste.teste.modules.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,11 +24,11 @@ public class LivrosEntity implements Serializable {
     @Column(updatable = false)
     private int codigo;
 
-    @Column(length = 30, nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String nome;
 
 
-    @Column(length = 4, nullable = false)
+    @Column(nullable = false)
     private double preco;
 
 
@@ -39,7 +37,7 @@ public class LivrosEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "fk_categorias")
-//    @JsonBackReference // ESTUDAR ISSO
+    @JsonBackReference // ESTUDAR ISSO
     private CategoriaEntity categoriaEntity;
 
     private Boolean Status;

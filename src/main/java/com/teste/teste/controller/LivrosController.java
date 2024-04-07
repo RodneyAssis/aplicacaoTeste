@@ -5,11 +5,16 @@ import com.teste.teste.modules.entities.CategoriaEntity;
 import com.teste.teste.modules.entities.LivrosEntity;
 import com.teste.teste.services.CategoriaServices;
 import com.teste.teste.services.LivrosServices;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -33,24 +38,33 @@ public class LivrosController {
     }
 
 
+    @Operation(description = "Solicita ao usuário administrador capacidade de registrar um livro encaminhando o nome," +
+            " preco e categoria. Caso o livro não possua seja registrado em nenhuma categoria o status dele deverá" +
+            " permanecer como false")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Livro registrado com exito."),
+            @ApiResponse(responseCode = "400", description = "Possivel falha no registro, favor verificar com o" +
+                    " administrador")
+    })
     @PostMapping
     public ResponseEntity<Object> saveLivros(@RequestBody @Valid LivrosDTO livrosDTO){
+
         if (livrosServices.existeLivro(livrosDTO.getNome())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: Nome/ID já registrado");
         }
         var livrosEntity = new LivrosEntity();
         BeanUtils.copyProperties(livrosDTO, livrosEntity);
+        livrosEntity.setNome(livrosDTO.getNome());
         livrosEntity.setCodigo(livrosServices.cont());
         var teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3")));
         livrosEntity.setCreatAt(teste);
 
         String nomeCategoria = livrosDTO.getCategoria();
-
-        var categoriaEntity = categoriaServices.findByName(nomeCategoria);
-
-        livrosEntity.setCategoriaEntity(categoriaEntity.get());
-
-
+        livrosEntity.setStatus(Boolean.FALSE);
+        if (categoriaServices.findByName(nomeCategoria).isPresent()){
+            livrosEntity.setCategoriaEntity(categoriaServices.findByName(nomeCategoria).get());
+            livrosEntity.setStatus(Boolean.TRUE);
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body(livrosServices.save(livrosEntity));
     }
@@ -61,16 +75,12 @@ public class LivrosController {
     }
 
     @GetMapping("/{id}")
-    public Optional<LivrosEntity> viewForID(@PathVariable(value = "id") UUID id){
+    public ResponseEntity<Object> viewForID(@PathVariable(value = "id") UUID id){
         var result = livrosServices.findbyID(id);
         if (result.isEmpty()){
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ID não encontrado ou produto não existe");
-            return result;
+            return ResponseEntity.badRequest().body(result);
         }
-
-
-//        return ResponseEntity.status(HttpStatus.OK).body(result.get());
-        return result;
+        return ResponseEntity.status(HttpStatus.OK).body(result.get());
     }
 
     @DeleteMapping("/{id}")

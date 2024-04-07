@@ -32,14 +32,14 @@ public class CategoriaController {
 
     @PostMapping
     public ResponseEntity<Object> createCategoria(@RequestBody @Valid CategoriaDTO categoriaDTO){
-        if (categoriaServices.Existe(categoriaDTO.getNome_Categoria())){
+        if (categoriaServices.Existe(categoriaDTO.getNomeCategoria())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("A categoria já " +
-                    categoriaDTO.getNome_Categoria() + " já existe na base de dados.");
+                    categoriaDTO.getNomeCategoria() + " já existe na base de dados.");
         }
 
         var categoriaEntity = new CategoriaEntity();
         categoriaEntity.setCodigoCategoria(categoriaServices.cont());
-        categoriaEntity.setNomeCategoria(categoriaDTO.getNome_Categoria());
+        categoriaEntity.setNomeCategoria(categoriaDTO.getNomeCategoria());
 
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoriaServices.save(categoriaEntity));
@@ -47,8 +47,7 @@ public class CategoriaController {
 
     @Operation(description = "Listar todas categorias registradas e livros dessa mesma categoria.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Categorias e livros do mesmo exibidos com sucesso."),
-        @ApiResponse()
+        @ApiResponse(responseCode = "200", description = "Categorias e livros do mesmo exibidos com sucesso.")
     }
     )
     @GetMapping

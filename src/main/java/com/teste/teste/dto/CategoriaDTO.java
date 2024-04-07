@@ -1,42 +1,29 @@
 package com.teste.teste.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class CategoriaDTO {
 
+    @JsonIgnore
+    private int codigoCategoria;
 
     @NotBlank
-    @NotNull
-    private int codigo;
-
-    @NotBlank
-    @NotNull
-    private String nome_Categoria;
-
-    @Min(0)
-    private int codigo_Categoria;
-
-//    List<LivrosEntity> livrosEntities;
+    @Size(min = 3, max = 20, message = "O nome da categoria deve possui entre {min} e {max} caracteres.")
+    private String nomeCategoria;
 
 
+    @JsonIgnore
     public int getCodigo() {
-        return codigo;
+        return codigoCategoria;
     }
 
-    public String getNome_Categoria() {
-        return nome_Categoria;
+    public String getNomeCategoria() {
+        return nomeCategoria;
     }
-
-    public int getCodigo_Categoria() {
-        return codigo_Categoria;
-    }
-
-//    public List<LivrosEntity> getLivrosEntities() {
-//        return livrosEntities;
-//    }
 
 
 }

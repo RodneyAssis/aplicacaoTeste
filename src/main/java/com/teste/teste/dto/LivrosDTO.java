@@ -1,26 +1,25 @@
 package com.teste.teste.dto;
 
-import jakarta.validation.constraints.*;
-
-import java.util.Locale;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
 public class LivrosDTO {
 
-
-    @NotBlank
-    @NotNull
+    @JsonIgnore
     private int codigo;
 
-    @NotBlank
-    @Size(max = 20)
+    @NotBlank(message = "Nome é obrigatorio.")
+    @Length(min = 3, max = 35, message = "O nome deve ter entre {min} e {max} caracteres.")
     private String nome;
 
     private String categoria;
 
-    @Max(1000)
-    @Min(0)
-    private double preco;
+    @Min(value = 5, message = "Preço não pode ser menor que 5")
+    @Max(value = 10000, message = "Compras não pode não pode ser maior quê 10,000")
+    private Double preco;
 
 //    private String file;
 
@@ -29,19 +28,17 @@ public class LivrosDTO {
         return nome;
     }
 
-    public double getPreco() {
-        return preco;
-    }
-
-    public int getCodigo() {
-        return codigo+1;
-    }
-
     public String getCategoria() {
         return categoria;
     }
 
-    //    public String getFile() {
-//        return file;
-//    }
+    public Double getPreco() {
+        return preco;
+    }
+
+    @JsonIgnore
+    public int getCodigo() {
+        return codigo+1;
+    }
+
 }

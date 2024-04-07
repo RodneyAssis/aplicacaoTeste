@@ -54,7 +54,7 @@ public class CategoriaEntity implements Serializable {
         this.nomeCategoria = nomeCategoria;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public List<LivrosEntity> getLivrosEntities() {
         return livrosEntities;
     }
