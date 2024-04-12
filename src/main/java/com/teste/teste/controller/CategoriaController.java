@@ -3,7 +3,6 @@ package com.teste.teste.controller;
 
 import com.teste.teste.dto.CategoriaDTO;
 import com.teste.teste.modules.entities.CategoriaEntity;
-import com.teste.teste.modules.entities.LivrosEntity;
 import com.teste.teste.services.CategoriaServices;
 import com.teste.teste.services.LivrosServices;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,9 +11,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.annotation.Documented;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -30,12 +31,32 @@ public class CategoriaController {
         this.livrosServices = livrosServices;
     }
 
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "Base de dados registrado com sucesso"),
+                    @ApiResponse(responseCode = "400", description = "Falha ao registrar a categoria na base de dados," +
+                            "favor entrar em contato com o administrador.")
+            }
+    )
     @PostMapping
-    public ResponseEntity<Object> createCategoria(@RequestBody @Valid CategoriaDTO categoriaDTO){
+    public ResponseEntity<Object> createCategoria(@RequestBody @Valid CategoriaDTO categoriaDTO,
+                                                  BindingResult bindingResult){
+
+        if (bindingResult.hasErrors()) {
+            List<String> errorValidacao = new ArrayList<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorValidacao.add(error.getField() + ":" + error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorValidacao);
+        }
+
+//        Verificar se já existe a categoria registrado na base de dados
         if (categoriaServices.Existe(categoriaDTO.getNomeCategoria())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("A categoria já " +
                     categoriaDTO.getNomeCategoria() + " já existe na base de dados.");
         }
+
+
 
         var categoriaEntity = new CategoriaEntity();
         categoriaEntity.setCodigoCategoria(categoriaServices.cont());

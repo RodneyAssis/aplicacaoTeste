@@ -30,6 +30,7 @@ public class CategoriaEntity implements Serializable {
     @OneToMany(mappedBy = "categoriaEntity")
     List<LivrosEntity> livrosEntities;
 
+
     public UUID getIdCategoria() {
         return idCategoria;
     }

@@ -13,12 +13,15 @@ import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,19 +50,26 @@ public class LivrosController {
                     " administrador")
     })
     @PostMapping
-    public ResponseEntity<Object> saveLivros(@RequestBody @Valid LivrosDTO livrosDTO){
+    public ResponseEntity<Object> saveLivros(@RequestBody @Valid LivrosDTO livrosDTO, BindingResult bindingResult ){
+
+        if (bindingResult.hasErrors()) {
+            List<String> errorValidacao = new ArrayList<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorValidacao.add(error.getField() + ":" + error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorValidacao);
+        }
 
         if (livrosServices.existeLivro(livrosDTO.getNome())){
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflito: Nome/ID já registrado");
         }
         var livrosEntity = new LivrosEntity();
         BeanUtils.copyProperties(livrosDTO, livrosEntity);
-        livrosEntity.setNome(livrosDTO.getNome());
         livrosEntity.setCodigo(livrosServices.cont());
-        var teste = Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3")));
-        livrosEntity.setCreatAt(teste);
+        livrosEntity.setCreatAt(Timestamp.valueOf(LocalDateTime.now(ZoneId.of("UTC-3"))));
 
         String nomeCategoria = livrosDTO.getCategoria();
+        livrosEntity.setCategoriaNome(nomeCategoria);
         livrosEntity.setStatus(Boolean.FALSE);
         if (categoriaServices.findByName(nomeCategoria).isPresent()){
             livrosEntity.setCategoriaEntity(categoriaServices.findByName(nomeCategoria).get());

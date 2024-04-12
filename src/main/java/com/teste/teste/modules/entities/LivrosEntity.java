@@ -3,6 +3,7 @@ package com.teste.teste.modules.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serial;
@@ -40,7 +41,12 @@ public class LivrosEntity implements Serializable {
     @JsonBackReference // ESTUDAR ISSO
     private CategoriaEntity categoriaEntity;
 
+    private String categoriaNome;
+
+    @NotNull
     private Boolean Status;
+
+
 
     public UUID getId() {
         return id;
@@ -96,5 +102,13 @@ public class LivrosEntity implements Serializable {
 
     public void setStatus(Boolean status) {
         Status = status;
+    }
+
+    public String getCategoriaNome() {
+        return categoriaNome;
+    }
+
+    public void setCategoriaNome(String categoriaNome) {
+        this.categoriaNome = categoriaNome;
     }
 }
